@@ -1,0 +1,13 @@
+[user]
+	email = paulovitin@gmail.com
+	name = Paulo Reis
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[init]
+	defaultBranch = main
+[safe]
+	directory = *
