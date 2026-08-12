@@ -5,7 +5,7 @@
 # ==============================================================================
 # Este script automatiza:
 # 1. Instalação do Xcode Command Line Tools
-# 2. Instalação e execução do Homebrew (Brewfile com 21 CLI + 15 GUI Apps)
+# 2. Instalação e execução do Homebrew (Brewfile com 21 CLI + 13 Casks + 2 MAS Apps)
 # 3. Instalação do Oh My Zsh e restauração dos seus Dotfiles (.zshrc, .gitconfig, .git-aliases.zsh)
 # 4. Aplicação das Preferências de Sistema do macOS (Finder, Dock, Teclado, Trackpad)
 # 5. Instalação de Runtimes e IAs (Bun, UV, PNPM, Pipx, Claude Code, Codex, Cline, Command-Code, etc.)
@@ -61,9 +61,10 @@ else
 fi
 
 echo "➜ Atualizando Homebrew e instalando pacotes do Brewfile..."
+echo -e "${YELLOW}Dica: Para os apps da App Store (ColorSlurp, GIPHY Capture), certifique-se de estar logado na App Store com seu Apple ID.${NC}"
 brew update
-brew bundle --file="./Brewfile"
-echo -e "${GREEN}✓ Todos os aplicativos e ferramentas CLI foram instalados!${NC}"
+brew bundle --file="./Brewfile" || true
+echo -e "${GREEN}✓ Pacotes e aplicativos do Brewfile processados!${NC}"
 
 # ------------------------------------------------------------------------------
 # 🐚 3. Oh My Zsh
