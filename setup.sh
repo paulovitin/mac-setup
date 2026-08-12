@@ -6,9 +6,9 @@
 # Este script automatiza:
 # 1. Instalação do Xcode Command Line Tools
 # 2. Instalação e execução do Homebrew (Brewfile com 21 CLI + 13 Casks)
-# 3. Instalação e Ativação do Node.js LTS via NVM
+# 3. Instalação do Node.js LTS via NVM
 # 4. Instalação do Oh My Zsh e restauração dos seus Dotfiles (.zshrc, .gitconfig, .git-aliases.zsh)
-# 5. Instalação de Runtimes e IAs (Claude Code, Codex, Cline, Command-Code, Bun, UV, PNPM, Pipx, Qoder)
+# 5. Instalação via CURL de Ferramentas e IAs (Claude Code, Codex, Bun, UV, OpenCode, Qoder, Cline, CMD)
 # 6. Aplicação das Preferências de Sistema do macOS (Finder, Dock, Teclado, Trackpad)
 # ==============================================================================
 
@@ -49,7 +49,7 @@ fi
 # ------------------------------------------------------------------------------
 echo -e "\n${YELLOW}[2/6] Verificando Homebrew...${NC}"
 if ! command -v brew &>/dev/null; then
-  echo "➜ Instalando Homebrew..."
+  echo "➜ Instalando Homebrew via CURL..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   
   if [[ $(uname -m) == 'arm64' ]]; then
@@ -67,7 +67,7 @@ brew bundle --file="./Brewfile"
 echo -e "${GREEN}✓ Todos os aplicativos e ferramentas CLI do Homebrew foram instalados!${NC}"
 
 # ------------------------------------------------------------------------------
-# 🟢 3. Ativação do Node.js via NVM
+# 🟢 3. Node.js & NVM
 # ------------------------------------------------------------------------------
 echo -e "\n${YELLOW}[3/6] Configurando Node.js e NVM...${NC}"
 export NVM_DIR="$HOME/.nvm"
@@ -80,108 +80,87 @@ elif [ -s "$NVM_DIR/nvm.sh" ]; then
 fi
 
 if command -v nvm &>/dev/null; then
-  echo "➜ Garantindo instalação do Node.js LTS via NVM..."
+  echo "➜ Instalando Node.js LTS via NVM..."
   nvm install --lts || true
   nvm use --lts || true
 elif ! command -v npm &>/dev/null; then
-  echo "➜ Instalando Node.js diretamente..."
+  echo "➜ Instalando Node.js..."
   brew install node || true
 fi
 
 # ------------------------------------------------------------------------------
-# 🐚 4. Oh My Zsh & Restaurando Dotfiles (.zshrc, .gitconfig, .git-aliases.zsh)
+# 🐚 4. Oh My Zsh & Dotfiles
 # ------------------------------------------------------------------------------
-echo -e "\n${YELLOW}[4/6] Configurando Oh My Zsh e Dotfiles...${NC}"
+echo -e "\n${YELLOW}[4/6] Instalando Oh My Zsh via CURL e restaurando Dotfiles...${NC}"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-  echo "➜ Instalando Oh My Zsh..."
   RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || true
 fi
 
 if [ -f "./zshrc" ]; then
-  echo "➜ Atualizando ~/.zshrc..."
+  echo "➜ Aplicando ~/.zshrc..."
   cp ./zshrc ~/.zshrc
 fi
 
 if [ -f "./git-aliases.zsh" ]; then
-  echo "➜ Atualizando ~/.git-aliases.zsh..."
+  echo "➜ Aplicando ~/.git-aliases.zsh..."
   cp ./git-aliases.zsh ~/.git-aliases.zsh
 fi
 
 if [ -f "./gitconfig" ]; then
-  echo "➜ Atualizando ~/.gitconfig..."
+  echo "➜ Aplicando ~/.gitconfig..."
   cp ./gitconfig ~/.gitconfig
 fi
-echo -e "${GREEN}✓ Dotfiles aplicados com sucesso!${NC}"
+echo -e "${GREEN}✓ Dotfiles aplicados!${NC}"
 
 # ------------------------------------------------------------------------------
-# 🤖 5. Runtimes, Pacotes NPM, Pipx & Ferramentas de IA (Claude, Codex, Cline, CMD, Qoder)
+# 🤖 5. Instalação via CURL de Ferramentas & CLIs de IA
 # ------------------------------------------------------------------------------
-echo -e "\n${YELLOW}[5/6] Instalando Runtimes, Pacotes NPM, Pipx & CLIs de IA...${NC}"
+echo -e "\n${YELLOW}[5/6] Instalando Ferramentas e CLIs de IA via CURL...${NC}"
 
-# Bun JavaScript Runtime
-if ! command -v bun &>/dev/null; then
-  echo "➜ Instalando Bun..."
-  curl -fsSL https://bun.sh/install | bash || true
-fi
+# 1. Claude Code CLI via CURL / Installer oficial
+echo "➜ Instalando Claude Code via script de instalação..."
+curl -fsSL https://claude.ai/install.sh | bash 2>/dev/null || npm install -g @anthropic-ai/claude-code 2>/dev/null || true
 
-# Astral UV (Python manager)
-if ! command -v uv &>/dev/null; then
-  echo "➜ Instalando Astral UV..."
-  curl -LsSf https://astral.sh/uv/install.sh | sh || true
-fi
+# 2. Codex CLI via CURL / NPM fallback
+echo "➜ Instalando Codex CLI..."
+curl -fsSL https://codex.openai.com/install.sh | bash 2>/dev/null || npm install -g @openai/codex 2>/dev/null || true
 
-# Garantir PATH para NPM
-export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin"
+# 3. Bun JavaScript Runtime via CURL
+echo "➜ Instalando Bun via CURL..."
+curl -fsSL https://bun.sh/install | bash 2>/dev/null || true
 
-# Instalação dos Pacotes NPM Globais (Claude Code, Codex, Cline, Command-Code, etc.)
+# 4. Astral UV Python Manager via CURL
+echo "➜ Instalando Astral UV via CURL..."
+curl -LsSf https://astral.sh/uv/install.sh | sh 2>/dev/null || true
+
+# 5. OpenCode CLI via CURL
+echo "➜ Instalando OpenCode CLI via CURL..."
+curl -fsSL https://opencode.ai/install.sh | bash 2>/dev/null || true
+
+# 6. Qoder CLI via CURL
+echo "➜ Instalando Qoder CLI via CURL..."
+curl -fsSL https://qoder.ai/install.sh | bash 2>/dev/null || true
+
+# 7. Demais Pacotes NPM Globais (Cline, Command-Code, Pen, MCPorter, PNPM, Yarn)
 if command -v npm &>/dev/null; then
-  echo "➜ Instalando Claude Code (@anthropic-ai/claude-code)..."
-  npm install -g @anthropic-ai/claude-code || true
-
-  echo "➜ Instalando Codex (@openai/codex)..."
-  npm install -g @openai/codex || true
-
-  echo "➜ Instalando Cline (cline)..."
-  npm install -g cline || true
-
-  echo "➜ Instalando Command-Code (command-code)..."
-  npm install -g command-code || true
-
-  echo "➜ Instalando PNPM, Yarn, Pen CLI & MCPorter..."
-  npm install -g pnpm yarn @pen.dev/cli mcporter || true
-else
-  echo -e "${YELLOW}⚠️ npm não encontrado. Instalação manual necessária para Claude, Codex, Cline e Command-Code.${NC}"
+  echo "➜ Instalando Cline, Command-Code, PNPM, Yarn, Pen CLI & MCPorter..."
+  npm install -g cline command-code pnpm yarn @pen.dev/cli mcporter 2>/dev/null || true
 fi
 
-# Ferramentas Python via Pipx selecionadas
+# 8. Ferramentas Pipx & UV
 if command -v pipx &>/dev/null; then
-  echo "➜ Instalando ferramentas Python via Pipx (Agent Reach, Bilibili, PlatformIO, Antigravity)..."
   pipx install agent-reach 2>/dev/null || true
   pipx install bilibili-cli 2>/dev/null || true
   pipx install platformio 2>/dev/null || true
   pipx install antigravity-cli 2>/dev/null || true
 fi
 
-# Ferramentas via UV
 if command -v uv &>/dev/null; then
-  echo "➜ Instalando ferramentas via UV..."
   uv tool install notebooklm-mcp-cli 2>/dev/null || true
   uv tool install browser-harness 2>/dev/null || true
 fi
 
-# OpenCode CLI
-if ! command -v opencode &>/dev/null; then
-  echo "➜ Instalando OpenCode CLI..."
-  curl -fsSL https://opencode.ai/install.sh | bash 2>/dev/null || true
-fi
-
-# Qoder CLI
-if ! command -v qodercli &>/dev/null; then
-  echo "➜ Instalando Qoder CLI..."
-  curl -fsSL https://qoder.ai/install.sh | bash 2>/dev/null || true
-fi
-
-echo -e "${GREEN}✓ Runtimes e ferramentas de IA instalados!${NC}"
+echo -e "${GREEN}✓ Todas as ferramentas e CLIs de IA foram instaladas via CURL/Scripts!${NC}"
 
 # ------------------------------------------------------------------------------
 # ⚙️ 6. Preferências de Sistema do macOS (defaults write)
