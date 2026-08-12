@@ -1,15 +1,13 @@
 # ==============================================================================
 # Brewfile - Instalação de Softwares para o Novo macOS
-# Gerado a partir da seleção do usuário em software_selection.md
-# Execute com: brew bundle --file=./Brewfile
 # ==============================================================================
-
-# Taps (Repositórios extras do Homebrew)
-tap "homebrew/bundle"
 
 # ------------------------------------------------------------------------------
 # Ferramentas de Linha de Comando (Brew Formulas)
 # ------------------------------------------------------------------------------
+
+# CLI da Mac App Store
+brew "mas"
 
 # Linguagens, Runtimes e Gerenciadores de Versão
 brew "git"
@@ -64,5 +62,9 @@ cask "spotify"
 cask "vlc"
 cask "the-unarchiver"
 cask "mounty"
-cask "colorslurp"
-cask "giphy-capture"
+
+# ------------------------------------------------------------------------------
+# Aplicativos da Mac App Store (via mas CLI)
+# ------------------------------------------------------------------------------
+mas "ColorSlurp", id: 1287239339
+mas "GIPHY Capture", id: 492648096
