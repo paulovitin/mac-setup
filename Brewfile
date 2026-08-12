@@ -6,9 +6,6 @@
 # Ferramentas de Linha de Comando (Brew Formulas)
 # ------------------------------------------------------------------------------
 
-# CLI da Mac App Store
-brew "mas"
-
 # Linguagens, Runtimes e Gerenciadores de Versão
 brew "git"
 brew "gh"
@@ -62,9 +59,3 @@ cask "spotify"
 cask "vlc"
 cask "the-unarchiver"
 cask "mounty"
-
-# ------------------------------------------------------------------------------
-# Aplicativos da Mac App Store (via mas CLI)
-# ------------------------------------------------------------------------------
-mas "ColorSlurp", id: 1287239339
-mas "GIPHY Capture", id: 492648096
