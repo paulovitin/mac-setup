@@ -9,6 +9,7 @@
 # Linguagens, Runtimes e Gerenciadores de Versão
 brew "git"
 brew "gh"
+brew "rtk"
 brew "go"
 brew "python@3.12"
 brew "pyenv"

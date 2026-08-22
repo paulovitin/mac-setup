@@ -1,6 +1,6 @@
-# 🍏 macOS Setup & Bootstrap
+# 🍏 macOS/Linux Setup & Bootstrap
 
-Script automatizado de configuração e restauração para um novo Mac, contendo preferências de sistema, pacotes Homebrew, dotfiles (Zsh, Git) e ferramentas de desenvolvimento/IA.
+Script automatizado de configuração e restauração para um novo Mac ou Linux home server, contendo preferências de sistema (macOS), pacotes, dotfiles (Zsh, Git) e ferramentas de desenvolvimento/IA.
 
 ## 🚀 Como Executar em um Mac Novo
 
@@ -9,6 +9,9 @@ Abra o Terminal e execute o comando de linha única abaixo:
 ```bash
 git clone https://github.com/paulovitin/mac-setup.git ~/.mac-setup && cd ~/.mac-setup && ./setup.sh
 ```
+
+No Linux, o mesmo comando seleciona automaticamente `setup-linux.sh` e ignora
+defaults do macOS e aplicativos GUI.
 
 ---
 
@@ -33,3 +36,36 @@ git clone https://github.com/paulovitin/mac-setup.git ~/.mac-setup && cd ~/.mac-
 - **CLIs Globais (NPM)**: `cline`, `command-code`, `@openai/codex`, `@anthropic-ai/claude-code`, `@pen.dev/cli`, `mcporter`, `pnpm`, `yarn`.
 - **Pipx & UV Tools**: `agent-reach`, `bilibili-cli`, `platformio`, `antigravity-cli`, `notebooklm-mcp-cli`, `browser-harness`.
 - **Runtimes**: Bun, Astral UV, OpenCode CLI.
+
+### 5. 🪨 Otimização de contexto no Codex
+
+- **RTK** é o padrão para saída de shell e é instalado via Homebrew no macOS ou
+  pelo instalador oficial no Linux.
+- **Caveman CLI 1.1.0** é instalado com seus binários locais, mas permanece
+  opcional: não ativa a skill `/caveman`, hooks automáticos de `shrink` nem o
+  proxy do Codex.
+- O Codex recebe instruções globais em `${CODEX_HOME:-~/.codex}/AGENTS.md`.
+  O instalador preserva o arquivo existente e atualiza apenas o bloco gerenciado
+  por este repositório.
+
+Configuração escolhida:
+
+```text
+Codex + RTK por padrão
+Caveman seletivo para JSON, logs, HTML, TOON e memória
+sem dupla compressão automática
+```
+
+Para instalar somente essa camada sem repetir o restante do setup:
+
+```bash
+bash setup-ai-tools.sh
+```
+
+Comandos opcionais do Caveman:
+
+```bash
+caveman tools shrink -- <comando>
+caveman tools toon encode < arquivo.json
+caveman stats
+```

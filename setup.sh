@@ -14,6 +14,11 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ "$(uname -s)" == "Linux" ]]; then
+  exec bash "${SCRIPT_DIR}/setup-linux.sh" "$@"
+fi
+
 # Cores para o output do terminal
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -28,7 +33,7 @@ echo -e "${BLUE}=====================================================${NC}"
 sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$SCRIPT_DIR"
 cd "$DIR"
 
 # ------------------------------------------------------------------------------
@@ -159,6 +164,9 @@ if command -v uv &>/dev/null; then
   uv tool install notebooklm-mcp-cli 2>/dev/null || true
   uv tool install browser-harness 2>/dev/null || true
 fi
+
+# 9. RTK default + Caveman optional context tools + Codex global guidance
+bash "${DIR}/setup-ai-tools.sh"
 
 echo -e "${GREEN}✓ Todas as ferramentas e CLIs de IA foram instaladas via CURL/Scripts!${NC}"
 
